@@ -1,0 +1,90 @@
+After some  effort, I managed  to get  all the word  frequencies from all  of the  files into a  data frame
+Instead of the  name of the files, I  had a number (1-15) indicating  the order in which they  were read. I
+intend  to fix  that later,  that is  perhaps sloppy,  but I  don't know  that I  need the  file names  for
+anything,  I just  occasionally need  to know  wether  words are  from different  sources, so  maybe not  I
+realized  that  rbinding  together the  dataframes  created  by  tokenizing  the individual  documents  and
+calculating the  word frequency  was in fact  creating multiple instances  of the  same word, one  for each
+document. I also realized I only needed to know what  came from whate document in one question, so I made a
+seperate for loop to  calculate that. (***this seems inefficient, will  consider further***)I then combined
+all the  documents into one sting  so I could  get the wordFrequencies which  were true of all  of them.The
+next task  seemed to  be to weed  out the  common words ex("of,  and") and find  the more  substantive most
+common wordsResults below:
+
+
+a. precentage of  first-person singular pronouns: 0.01503%. I  believe this is because "I"  is not commonly
+used in Science papers.  I believe this because when I  ran the same test on just twitter  data I got about
+2%, which  is much higher.  I should do  futher testing  to figure out  if this is  the case or  not. After
+cleaning my  data, I  found that the  combined documents  contained 3% first  person pronouns.  This number
+seemed more reasonable.
+
+
+b.  According to  my  calculations,  14/15 documents  mention  the word  "gene"  or  "protien". This  would
+seemingly imply that  all documents save the twitter  file contain the word "gene" or  "protien". I decided
+to double check this by  hand (well by command+f) because I was dubious. I double  checked this by hand and
+it was  true.c. If you don't  control for word frequency  in everyday langauage (for  example, the relative
+prevalence of "of" or "and"), the top ten words (and their counts) are:
+
+
+1 of 40854
+2 the 39821
+3 and 26945
+4 in 22901
+5 a 18149
+6 to 15638
+7 for 11139
+8 1 10223
+9 with 9390
+10 that 8225
+
+However, I  felt it necessary to  control for the ubiquity  of such words. When  I was first studying  R, a
+turtorial provided me  with a spreadsheet of word  frequency, "from Peter Norvig using  Google Web Trillion
+Word  Corpus,   collected  from   data  gathered   via  Google's  crawling   of  known   English  Websites"
+(http://programminghistorian.github.io/ph-submissions/lessons/published/basic-text-processing-in-r).
+Persuant to the  advice in the tutorial, I joined  my word fequency dataframe with the  word frequency data
+from the internet,  and filtered so that I only  had words whose fequency in the  English language at large
+was < 0.1% This turned out to be insufficient as I  still had words like "were" in my output. I adjusted my
+filter to  less than 0.09%. After  this, the top  ten words and their  counts, and also frequencies  in the
+greater english language were:
+
+        word count language    frequency
+       <chr> <dbl>    <chr>        <dbl>
+ 1    lethal  4176       en 0.0005170654
+ 2 synthetic  4107       en 0.0012332298
+ 3     cells  3645       en 0.0075031904
+ 4      mice  3556       en 0.0020348978
+ 5    pubmed  3357       en 0.0054915103
+ 6      pmid  3356       en 0.0030548079
+ 7      cell  3235       en 0.0192251166
+ 8   indexed  3135       en 0.0033449600
+ 9   medline  3135       en 0.0030124583
+10    author  3075       en 0.0305740590
+
+d/e. I  was origninally going  to approach this  problem by just  using the tokenizer  I had been  using to
+count the number of negating  words. However, I realized that this was probably not  the best plan. I began
+looking for a part-of-speech tagger. In the process of  which I realized there might have been a better way
+to do what I did  for questions a-c. I will look into this futher later.  After many failed attempts to use
+a  part-of-speech tagger,  I theorized  that  perhaps this  was due  to the  size  of the  documents I  was
+attempting to tag. I tested  a single line of text and found that it sucessfully  parsed. So I combined all
+the documents into one big  document, then split into smaller text files every  ten lines. I then processed
+each one  of these individually in  a for loop. That  worked, but I forgot  to clean my data.  I cleaned my
+data and then redid the tagging with a program Tiffany suggested, phrasemachine. It ran much faster.
+
+ 
+e. By  counting the number of  words PhraseMachine tagged as  coordinating conjunctions (CC), I  found that
+there was 29,757 instances of conjunction in the document.
+
+d. Neither the Penn  POS tags nor the TreeTagger pos  tags included a tag for negation.  I decided to count
+the number of times "no" or  "not" was used in the text and came back with  5,328. This number seemed a bit
+low so I decided  to include other words like "sans"  and "without". But then I thought  about how this was
+probably wrong of me because what about the contraction  n't? I tried running the program to find the total
+counts of a  list of negative words I  found on a grammar site and  somehow I got a lower  number: 3,531. I
+was mystified. I  then included some adverbs and verbs  that were negative and got 3,549.  The closeness of
+these two numbers and the fact that they are less  than the original number is baffling. I would say, based
+on their closeness that the instance of negation is ~4,000.
+However, after cleaning  my text and running my analysis  again, I got 177 instances of  negation. The fact
+that  the instances  of  negation keep  markedly  decreasing is  troubling. However,  perhaps  it could  be
+attributed to  the potential accidental  inclusion of the  NOT column in the  tweets? I don't  recall being
+that sloppy, I could have sworn I only ever ran it with clean data.
+Perhaps I need a better regex? One thing I noted while  going over the data quickly by hand is that some of
+the twitter users caused us to have misspelled words, so maybe that is negatively impacting my data.
+
