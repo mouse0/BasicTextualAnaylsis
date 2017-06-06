@@ -6,7 +6,7 @@ tweets <- read.table(con, sep = "\t", quote = "")
 # Get just the tweets (not all that other weird data)
 tweets <- tweets[2]
 
-# Clean the tweets into one nice string of ASCII characters
+# Clean the tweets into one string of ASCII characters
 allTweets <- ""
 for (i in 1:nrow(tweets)) {
   allTweets <- paste(allTweets, tweets[i, ], sep = " ")
@@ -27,7 +27,7 @@ allTweets <- gsub("http\\w+", "", allTweets)
 allTweets <- gsub("[ \t]{2,}", "", allTweets)
 allTweets <- gsub("^\\s+|\\s*$", "", allTweets)
 
-# Write just the tweets
+# Write just the tweets to a file
 con <- file("~/Code/BasicTextualAnalysis/2017 Summer Fellowship data/cleanTweets.txt", "w")
 cat(allTweets, file = con)
 close(con)
@@ -44,8 +44,8 @@ documents <- c(1:length(files) + 2)
 # Put the tweets in it
 documents[1] <- allTweets
 
-# Put the other text file that's not in the folder with its
-# friends in the vector
+# Put the other text file that's not in the folder with the other
+# documnets in the vector
 con <- file("~/Code/BasicTextualAnalysis/2017 Summer Fellowship data/synthetic.lethal.txt")
 temp <- paste(readLines(con), collapse = "\n")
 temp <- iconv(temp, "latin1", "ASCII", sub="")
