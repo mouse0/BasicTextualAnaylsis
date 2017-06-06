@@ -98,11 +98,11 @@ for (i in 1:length(files)) {
 }
 tagged <- POS_tag_documents(documents)
 
-# Write the messy list into one nice csv for safekeeping
+# Write the messy list into one csv for safekeeping
 
 lapply(tagged, function(x) write.table(data.frame(x), "labeled.csv", append = T, sep = ","))
 
-# Get it back as a nice data frame
+# Get it back as a data frame
 taggedData <- read.csv("~/Code/BasicTextualAnalysis/labeled.csv")
 
 # count the conjunctions
