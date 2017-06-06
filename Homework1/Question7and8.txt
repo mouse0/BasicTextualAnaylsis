@@ -1,0 +1,7 @@
+7.  If that is meant to be in R, the = sign should be a <-.  Also, the fmeasure is ((B^2 + 1) * precision * 
+recall) / (b^2 * precision) * recall.  The calcuations given (f.measure = 2* precision* recall) seem to be 
+missing a few steps unless beta = 1 and this is merely calculating the numerator.
+
+8. If all of the arguments (falseNegatives, falsePostivies, truePositives, trueNegatives) are 0, the program
+will crash because you cannot divide by 0.  Also if any of the arguments are null or not numbers the program
+will crash.
